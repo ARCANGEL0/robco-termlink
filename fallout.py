@@ -45,29 +45,28 @@ MENU_HEAD2 = ('      SoftLock Solutions, Inc\n'
               '"Your Security is Our Security"',
               '>\\ Welcome, ' + socket.gethostname(), '')
 
+MENUDK = [
+    'RETURN',
+    'STATUS',
+    'START OVERSEER NETWORK',
+    'AUTOWIPE',
+    'START ON BOOT',
+    'LOCAL ROBCO IP',
+    'CHANGE NETWORK IDENTITY',
+    'CHANGE ROBCO CHIPSET MAC',
+    'RESTORE ROBCO CHIPSET MAC',
+]
+
 MENU1 = [
     'TERMINAL LINK',
     'JOURNAL',
     'VAULT TOOLS',
-    'AUTOMATRON CONTROL',
     'SYSTEM TUNING',
     'SECURE EXIT',
     'CORE RESTART',
     'POWER OFF'
 ]
 
-MENU_TOOLS = [
-    'RETURN',
-    'WPS ATOMIZER',
-    'PIP SCAN',
-    'VAULTMAPPER',
-    'NUKA BREACH',
-    'G.E.C.K.O PAYLOAD',
-    'NETNEEDLE',
-    'KEYSTRIKER',
-    'JAMMER 3000',
-    'STEELPACKET'
-]
 
 MENU_SERVICES = [
     'RETURN',
@@ -294,89 +293,6 @@ def lock_screen():
 
 ###### RENDERING FUNCTIONS NOW BELOW
 
-def menuTools(scr):
-
-    keyInput = 0
-    selection = 0
-    selection_count = len(MENU_TOOLS)
-    selection_start_y = scr.getyx()[0]
-    largura = scr.getmaxyx()[1]
-
-    while keyInput != novaLinha:
-        scr.move(selection_start_y, 0)
-        line = 0
-        for sel in MENU_TOOLS:
-            whole_line = '> ' + MENU_TOOLS[line]
-            whole_line += '\n'
-
-            if line == selection:
-                scr.addstr(whole_line, curses.A_REVERSE)
-            else:
-                scr.addstr(whole_line)
-            line += 1
-            scr.refresh()
-
-        keyInput = scr.getch()
-
-        if keyInput == curses.KEY_UP and selection > 0:
-            selection -= 1
-        elif keyInput == curses.KEY_DOWN and selection < selection_count - 1:
-            selection += 1
-
-        if keyInput == ord('\n') and selection == 0:
-            audio("$HOME/.fallout/audio/keyenter.wav")
-            scr.erase()
-            menu()
-
-        elif keyInput == ord('\n') and selection == 1:
-            audio("$HOME/.fallout/audio/keyenter.wav")
-            print("\n\nOPENING WORDPS ATOMIZER. . . ")
-            time.sleep(2)
-                # wpscan
-
-        elif keyInput == ord('\n') and selection == 2:
-            audio("$HOME/.fallout/audio/keyenter.wav")
-            print("\n\nSTARTING PIP SCAN 3000. . . ")
-            time.sleep(2)
-                # ezymap
-
-        elif keyInput == ord('\n') and selection == 3:
-            audio("$HOME/.fallout/audio/keyenter.wav")
-            print("\n\nOPENING VAULTMAPPER. . . ")
-            time.sleep(2)
-                # sqlmap
-
-        elif keyInput == ord('\n') and selection == 4:
-            audio("$HOME/.fallout/audio/keyenter.wav")
-            print("\n\nOPENING NUKA BREACH. . . ")
-            time.sleep(2)
-                # metasploit console
-
-        elif keyInput == ord('\n') and selection == 5:
-            audio("$HOME/.fallout/audio/keyenter.wav")
-            print("\n\nOPENING NETNEEDLE. . . ")
-            time.sleep(2)
-                # massScan
-
-        elif keyInput == ord('\n') and selection == 6:
-            audio("$HOME/.fallout/audio/keyenter.wav")
-            print("\n\nOPENING KEYSTRIKER. . . ")
-            time.sleep(2)
-                # wifite
-
-        elif keyInput == ord('\n') and selection == 7:
-            audio("$HOME/.fallout/audio/keyenter.wav")
-            print("\n\nOPENING JAMMER 3000. . . ")
-            time.sleep(2)
-                # wireshark
-
-        elif keyInput == ord('\n') and selection == 8:
-            audio("$HOME/.fallout/audio/keyenter.wav")
-            print("\n\nOPENING STEELPACKET. . . ")
-            time.sleep(2)
-                # burp suite
-
-
 
 
 
@@ -508,9 +424,9 @@ def menuServicos(scr):
     largura = scr.getmaxyx()[1]
 
     if checkNet():
-        MENU_SERVICES[1] = "STOP OVERSEER NETWORK"
+        MENU_SERVICES[1] = "OVERSEER NETWORK [RUNNING]"
     else:
-        MENU_SERVICES[1] = "START OVERSEER NETWORK"
+        MENU_SERVICES[1] = "OVERSEER NETWORK [INACTIVE]"
 
 
     if checkPS('apache2'):
@@ -561,18 +477,8 @@ def menuServicos(scr):
 
         elif keyInput == ord('\n') and selection == 1:
             audio("$HOME/.fallout/audio/keyenter.wav")
-            if checkNet():
-                print("\n\nDISCONNECTING OVERSEER NET. . . ")
-                time.sleep(2)
-                os.system('torall -x')
-                scr.erase()
-                servicos()
-            else:
-                print("\n\nCONNETING OVERSEER NET. . . ")
-                time.sleep(2)
-                os.system('torall -s')
-                scr.erase()
-                servicos()
+            scr.erase()
+            darknet()
 
         elif keyInput == ord('\n') and selection == 2:
             audio("$HOME/.fallout/audio/keyenter.wav")
@@ -608,13 +514,13 @@ def menuServicos(scr):
             if checkPS('tor'):
                 print("\n\nSTOPPING RADNET. . . ")
                 time.sleep(2)
-                os.system('sudo service tor stop')
+                os.system('sudo pkill tor')
                 scr.erase()
                 servicos()
             else:
                 print("\n\nSTARTING RADNET. . . ")
                 time.sleep(2)
-                os.system('sudo service tor start')
+                os.system('tor &')
                 scr.erase()
                 servicos()
 
@@ -690,30 +596,164 @@ def criarMenu(scr):
 
         elif keyInput == ord('\n') and selection == 2:
             audio("$HOME/.fallout/audio/keyenter.wav")
-            tools()
+            servicos()
         elif keyInput == ord('\n') and selection == 3:
             audio("$HOME/.fallout/audio/keyenter.wav")
-            servicos()
-        elif keyInput == ord('\n') and selection == 4:
-            audio("$HOME/.fallout/audio/keyenter.wav")
             options()
-        elif keyInput == ord('\n') and selection == 5:
+        elif keyInput == ord('\n') and selection == 4:
             audio("$HOME/.fallout/audio/keyenter.wav")
                #logout
             lock_screen()
-        elif keyInput == ord('\n') and selection == 6:
+        elif keyInput == ord('\n') and selection == 5:
             audio("$HOME/.fallout/audio/keyenter.wav")
             print("\n\n\nREBOOTING ROBCO INDUSTRIES (TM) UNIFIED OPERATIONAL SYSTEM")
 
             time.sleep(5)
             os.system("sudo shutdown -r now")
         
-        elif keyInput == ord('\n') and selection == 7:
+        elif keyInput == ord('\n') and selection == 6:
             audio("$HOME/.fallout/audio/keyenter.wav")
             print("\n\n\nG O O D    B Y E ! ")
 
             time.sleep(5)
             os.system("sudo shutdown -h now")
+
+
+
+def criarDarknet(scr):
+
+    keyInput = 0
+    selection = 0
+    selection_count = len(MENUDK)
+    selection_start_y = scr.getyx()[0]
+    largura = scr.getmaxyx()[1]
+
+    while keyInput != novaLinha:
+        scr.move(selection_start_y, 0)
+        line = 0
+        for sel in MENUDK:
+            whole_line = '> ' + MENUDK[line]
+            space = largura - len(whole_line) % largura + 20
+            whole_line += '\n'
+
+            if line == selection:
+                scr.addstr(whole_line, curses.A_REVERSE)
+            else:
+                scr.addstr(whole_line)
+            line += 1
+            scr.refresh()
+
+
+        keyInput = scr.getch()
+
+        if keyInput == curses.KEY_UP and selection > 0:
+            selection -= 1
+        elif keyInput == curses.KEY_DOWN and selection < selection_count - 1:
+            selection += 1
+
+        if keyInput == ord('\n') and selection == 0:
+            audio("$HOME/.fallout/audio/keyenter.wav")
+            scr.erase()
+            servicos()
+
+        if keyInput == ord('\n') and selection == 1:
+           print("\n\n- - OVERSEER NETWORK STATUS - -")
+           time.sleep(2)
+           os.system('sudo torctl status | micro')
+           scr.erase()
+           darknet()
+       
+        elif keyInput == ord('\n') and selection == 2:
+            audio("$HOME/.fallout/audio/keyenter.wav")
+            if checkNet():
+                print("\n\nDISCONNECTING OVERSEER NETWORK. . . ")
+                time.sleep(2)
+                os.system('sudo torctl stop')
+                scr.erase()
+                darknet()
+            else:
+                print("\n\nCONNECTING OVERSEER NETWORK. . . ")
+                time.sleep(2)
+                os.system('sudo torctl start')
+                scr.erase()
+                darknet()
+
+        elif keyInput == ord('\n') and selection == 3:
+            audio("$HOME/.fallout/audio/keyenter.wav")
+            print("\n\nACTIVATING AUTOWIPE. . . ")
+            time.sleep(2)
+            os.system('sudo torctl autowipe')
+            scr.erase()
+            darknet()
+
+        elif keyInput == ord('\n') and selection == 4:
+            audio("$HOME/.fallout/audio/keyenter.wav")
+            print("\n\nACTIVATING AUTO START. . . ")
+            time.sleep(2)
+            os.system('sudo torctl autostart')
+            scr.erase()
+            darknet()
+        elif keyInput == ord('\n') and selection == 5:
+            audio("$HOME/.fallout/audio/keyenter.wav")
+            print("\n\nFETCHING LOCAL TERMINAL COORDINATES. . . ")
+            time.sleep(2)
+            os.system('sudo torctl ip | micro ')
+            scr.erase()
+            darknet()
+        elif keyInput == ord('\n') and selection == 6:
+            audio("$HOME/.fallout/audio/keyenter.wav")
+            print("\n\nCHANGE OVERSEER NETWORK IDENTITY. . . ")
+            time.sleep(2)
+            os.system('sudo torctl chngid')
+            scr.erase()
+            darknet()
+        elif keyInput == ord('\n') and selection == 7:
+            audio("$HOME/.fallout/audio/keyenter.wav")
+            print("\n\nCHANGE OVERSEER NETWORK IDENTITY. . . ")
+            time.sleep(2)
+            os.system('sudo torctl chngid')
+            scr.erase()
+            darknet()
+        elif keyInput == ord('\n') and selection == 8:
+            audio("$HOME/.fallout/audio/keyenter.wav")
+            print("\n\nCHANGING LOCAL ROBCO CHIPSET MAC. . . ")
+            time.sleep(2)
+            os.system('sudo torctl chngmac')
+            scr.erase()
+            darknet()
+        elif keyInput == ord('\n') and selection == 9:
+            audio("$HOME/.fallout/audio/keyenter.wav")
+            print("\n\nRESTORING LOCAL ROBCO CHIPSET MAC. . . ")
+            time.sleep(2)
+            os.system('sudo torctl rvmac')
+            scr.erase()
+            darknet()
+
+
+def initDarknet(scr):
+
+    curses.use_default_colors()
+    scr.erase()
+    scr.move(0, 0)
+    curses.curs_set(0)
+
+    largura = scr.getmaxyx()[1]
+
+    audio("$HOME/.fallout/audio/beep.wav",3)
+    for header in MENU_HEAD:
+        centr(scr, header + '\n')
+
+    audio("$HOME/.fallout/audio/beep.wav",3)
+    for header in MENU_HEAD2:   
+        typeT(scr, header + '\n')
+
+    audio("$HOME/.fallout/audio/beep.wav",4)
+    for i in range(largura):
+        scr.addch(curses.ACS_BSBS)
+    scr.refresh()
+
+    return criarDarknet(scr)
+
 
 
 def initMenu(scr):
@@ -725,7 +765,7 @@ def initMenu(scr):
 
     largura = scr.getmaxyx()[1]
 
-    audio("$HOME/.fallout/audio/beep.wa v",3)
+    audio("$HOME/.fallout/audio/beep.wav",3)
     for header in MENU_HEAD:
         centr(scr, header + '\n')
 
@@ -765,27 +805,6 @@ def initOptions(scr):
 
 
 
-def initTools(scr):
-
-    curses.use_default_colors()
-    scr.erase()
-    scr.move(0, 0)
-    curses.curs_set(0)
-
-    largura = scr.getmaxyx()[1]
-
-    for header in MENU_HEAD:
-        centr(scr, header + '\n')
-
-    for header in MENU_HEAD2:
-        typeT(scr, header + '\n')
-
-    for i in range(largura):
-        scr.addch(curses.ACS_BSBS)
-    scr.refresh()
-
-    return menuTools(scr)
-
 
 def initServicos(scr):
 
@@ -809,6 +828,11 @@ def initServicos(scr):
     return menuServicos(scr)
 
 
+def darknet():
+
+    res = curses.wrapper(initDarknet)
+    return res
+
 def menu():
 
     res = curses.wrapper(initMenu)
@@ -821,9 +845,6 @@ def options():
     return res
 
 
-def tools():
-    res = curses.wrapper(initTools)
-    return res
 
 
 def servicos():
