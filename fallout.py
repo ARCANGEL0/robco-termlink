@@ -139,7 +139,7 @@ def checkPS(processName):
 def editHost():
     subprocess.run("sudo vim /etc/hostname", shell=True)
 def createCron():
-    os.environ['EDITOR'] = 'vim'
+    os.environ['EDITOR'] = 'micro'
     subprocess.run("crontab -e", shell=True)
 def getNetstat():
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as tmp:
@@ -177,18 +177,29 @@ def monitor():
         curses.doupdate()
     except:
         pass
-
 def check_tor_running():
-    for proc in psutil.process_iter(['name', 'cmdline']):
-        try:
-            if 'tor' in proc.info['name'].lower() or any('tor' in arg.lower() for arg in proc.info['cmdline']):
-                return True
-        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess, KeyError):
-            continue
-    return False
+    try:
+        # Use pgrep to check if tor process exists
+        result = subprocess.run(['pgrep', '-x', 'tor'], capture_output=True, text=True)
+        if result.stdout.strip():
+            return True
+        else:
+            return False
+    except Exception:
+        return False
+
 
 def checkNet():
-    return os.path.exists('/var/lib/torall/started')
+    try:
+        result = subprocess.run(['sudo', 'torctl', 'status'], capture_output=True, text=True, check=True)
+        output = result.stdout.lower()
+        # If output contains "torctl is stopped" or "tor service is: inactive", consider not running
+        if "torctl is stopped" in output or "tor service is: inactive" in output:
+            return False
+        return True
+    except subprocess.CalledProcessError:
+        # If command fails, assume not running
+        return False
 
 
 def keyboardModelLayout():
