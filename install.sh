@@ -25,15 +25,11 @@ fi
 grep -q "python $HOME/.fallout/init.py" "$RC_FILE" || echo "python $HOME/.fallout/init.py" >> "$RC_FILE"
 
 
-
-
-cp -r audio $HOME/.local/
-git clone https://github.com/bissisoft/torall.git
-mv torall $HOME/.local/
-cd $HOME/.local/torall
-chmod +x build.sh
-sudo ./build.sh
 cd $HOME
+sudo systemctl stop tor
+wget https://github.com/JohnMcLaren/torctl-bridged/releases/download/torctl-bridged/torctl-bridged_0.5.7-1_amd64.deb
+sudo apt install torctl-bridged_0.5.7-1_amd64.deb
+
 git clone https://github.com/ARCANGEL0/EzyMap.git
 mv EzyMap $HOME/.local/
 cd $HOME/.local/EzyMap 
