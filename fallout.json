@@ -20,6 +20,6 @@
   "screenCurvature": 0.0805,
   "staticNoise": 0.4298,
   "windowOpacity": 0.8473,
-  "name": "temrinal",
-  "version": 2
+  "version": 2,
+  "name": "temrinal"
 }
