@@ -7,14 +7,14 @@
 <p align="center">
   
   
-<a href="https://github.com/ARCANGEL0/fallTerminal">
-    <img src="https://img.shields.io/github/stars/ARCANGEL0/fallTerminal?label=Stars&color=yellow&style=for-the-badge" alt="Stars">
+<a href="https://github.com/ARCANGEL0/robco-termlink">
+    <img src="https://img.shields.io/github/stars/ARCANGEL0/robco-termlink?label=Stars&color=yellow&style=for-the-badge" alt="Stars">
 </a>
-<a href="https://github.com/ARCANGEL0/fallTerminal">
-    <img src="https://img.shields.io/github/watchers/ARCANGEL0/fallTerminal?label=Watchers&color=green&style=for-the-badge" alt="Watchers">
+<a href="https://github.com/ARCANGEL0/robco-termlink">
+    <img src="https://img.shields.io/github/watchers/ARCANGEL0/robco-termlink?label=Watchers&color=green&style=for-the-badge" alt="Watchers">
 </a>
-<a href="https://github.com/ARCANGEL0/fallTerminal">
-    <img src="https://img.shields.io/github/forks/ARCANGEL0/fallTerminal?label=Forks&color=orange&style=for-the-badge" alt="Forks">
+<a href="https://github.com/ARCANGEL0/robco-termlink">
+    <img src="https://img.shields.io/github/forks/ARCANGEL0/robco-termlink?label=Forks&color=orange&style=for-the-badge" alt="Forks">
 </a>
 </p>
 
@@ -54,9 +54,9 @@ It is necessary to install certain packages if they are not already installed
 To make it more interesting, you can add the init.py file to start along with your shell, by editing .zshrc/.bashrc file
 And after this.. your terminal will always start with Fallout-style authentication.
 
-> git clone https://github.com/ARCANGEL0/fallTerminal 
+> git clone https://github.com/ARCANGEL0/robco-termlink 
 
-> cd fallTerminal
+> cd robco-termlink
 
 > echo "python3 $(pwd)/init.py" >> $HOME/.bashrc
 
